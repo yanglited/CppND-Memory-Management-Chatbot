@@ -19,12 +19,12 @@ private:
     ChatLogic* _chatLogic;
 
     // proprietary functions
-    int ComputeLevenshteinDistance(std::string s1, std::string s2);
+    static int ComputeLevenshteinDistance(std::string s1, std::string s2);
 
 public:
     // constructors / destructors
-    ChatBot();                             // constructor WITHOUT memory allocation
-    ChatBot(const std::string& filename);  // constructor WITH memory allocation
+    ChatBot();                                      // constructor WITHOUT memory allocation
+    explicit ChatBot(const std::string& filename);  // constructor WITH memory allocation
     ~ChatBot();
 
     //// STUDENT CODE
@@ -49,7 +49,7 @@ public:
     }
 
     // communication
-    void ReceiveMessageFromUser(std::string message);
+    void ReceiveMessageFromUser(const std::string& message);
 };
 
 #endif /* CHATBOT_H_ */

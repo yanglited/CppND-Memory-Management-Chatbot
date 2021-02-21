@@ -19,7 +19,7 @@ std::string imgBasePath = dataPath + "images/";
 bool ChatBotApp::OnInit()
 {
     // create window with name and show it
-    ChatBotFrame* chatBotFrame = new ChatBotFrame(wxT("Udacity ChatBot"));
+    auto* chatBotFrame = new ChatBotFrame(wxT("Udacity ChatBot"));
     chatBotFrame->Show(true);
 
     return true;

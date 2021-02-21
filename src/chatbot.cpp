@@ -18,19 +18,12 @@ ChatBot::ChatBot()
 
 // constructor WITH memory allocation
 ChatBot::ChatBot(const std::string& filename)
-    : _image(nullptr)
+    : _image(new wxBitmap(filename, wxBITMAP_TYPE_PNG))
     , _currentNode(nullptr)
     , _rootNode(nullptr)
     , _chatLogic(nullptr)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-
-    // invalidate data handles
-    _chatLogic = nullptr;
-    _rootNode  = nullptr;
-
-    // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
 ChatBot::~ChatBot()
@@ -38,10 +31,10 @@ ChatBot::~ChatBot()
     std::cout << "ChatBot Destructor" << std::endl;
 
     // deallocate heap memory
-    if(_image != NULL)  // Attention: wxWidgets used NULL and not nullptr
+    if(_image != nullptr)  // Attention: wxWidgets used NULL and not nullptr
     {
         delete _image;
-        _image = NULL;
+        _image = nullptr;
     }
 }
 
@@ -51,7 +44,7 @@ ChatBot::~ChatBot()
 ////
 //// EOF STUDENT CODE
 
-void ChatBot::ReceiveMessageFromUser(std::string message)
+void ChatBot::ReceiveMessageFromUser(const std::string& message)
 {
     // loop over all edges and keywords and compute Levenshtein distance to query
     typedef std::pair<GraphEdge*, int> EdgeDist;
@@ -60,7 +53,7 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
     for(size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i)
     {
         GraphEdge* edge = _currentNode->GetChildEdgeAtIndex(i);
-        for(auto keyword : edge->GetKeywords())
+        for(auto const& keyword : edge->GetKeywords())
         {
             EdgeDist ed {edge, ComputeLevenshteinDistance(keyword, message)};
             levDists.push_back(ed);
@@ -69,7 +62,7 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
 
     // select best fitting edge to proceed along
     GraphNode* newNode;
-    if(levDists.size() > 0)
+    if(!levDists.empty())
     {
         // sort in ascending order of Levenshtein distance (best fit is at the top)
         std::sort(
@@ -116,7 +109,7 @@ int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2)
     if(n == 0)
         return m;
 
-    size_t* costs = new size_t[n + 1];
+    auto* costs = new size_t[n + 1];
 
     for(size_t k = 0; k <= n; k++)
         costs[k] = k;
