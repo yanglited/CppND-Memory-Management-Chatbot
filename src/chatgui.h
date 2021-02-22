@@ -2,6 +2,7 @@
 #define CHATGUI_H_
 
 #include <wx/wx.h>
+#include <memory>
 
 class ChatLogic;  // forward declaration
 
@@ -15,9 +16,7 @@ private:
 
     //// STUDENT CODE
     ////
-
-    ChatLogic* _chatLogic;
-
+    std::unique_ptr<ChatLogic> _chatLogic;
     ////
     //// EOF STUDENT CODE
 
@@ -29,7 +28,7 @@ public:
     // getter / setter
     ChatLogic* GetChatLogicHandle()
     {
-        return _chatLogic;
+        return _chatLogic.get();
     }
 
     // events
@@ -38,8 +37,8 @@ public:
     void render(wxDC& dc);
 
     // proprietary functions
-    void AddDialogItem(wxString text, bool isFromUser = true);
-    void PrintChatbotResponse(std::string response);
+    void AddDialogItem(const wxString& text, bool isFromUser = true);
+    void PrintChatbotResponse(const std::string& response);
 
     DECLARE_EVENT_TABLE()
 };
@@ -54,7 +53,7 @@ private:
 
 public:
     // constructor / destructor
-    ChatBotPanelDialogItem(wxPanel* parent, wxString text, bool isFromUser);
+    ChatBotPanelDialogItem(wxPanel* parent, const wxString& text, bool isFromUser);
 };
 
 // frame containing all control elements
