@@ -54,7 +54,7 @@ public:
     }
 
     // proprietary functions
-    void AddToken(std::string token);  // add answers to list
+    void AddToken(std::string const& token);  // add answers to list
     void AddEdgeToParentNode(GraphEdge* edge);
     void AddEdgeToChildNode(GraphEdge* edge);
 

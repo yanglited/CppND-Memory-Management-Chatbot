@@ -2,6 +2,9 @@
 #include "graphedge.h"
 
 GraphNode::GraphNode(int id)
+    : _chatBot {nullptr}
+    , _id {id}
+
 {
     _id = id;
 }
@@ -11,13 +14,13 @@ GraphNode::~GraphNode()
     //// STUDENT CODE
     ////
 
-    delete _chatBot;
+    // Bug fix, removed delete of _chatBot. The GraphNode class does not own the resource.
 
     ////
     //// EOF STUDENT CODE
 }
 
-void GraphNode::AddToken(std::string token)
+void GraphNode::AddToken(std::string const& token)
 {
     _answers.push_back(token);
 }
