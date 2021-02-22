@@ -20,10 +20,10 @@ private:
 
 public:
     // constructor / desctructor
-    GraphEdge(int id);
+    explicit GraphEdge(int id);
 
     // getter / setter
-    int GetID()
+    [[nodiscard]] int GetID() const
     {
         return _id;
     }
@@ -39,7 +39,7 @@ public:
     }
 
     // proprietary functions
-    void AddToken(std::string token);
+    void AddToken(std::string const& token);
 };
 
 #endif /* GRAPHEDGE_H_ */

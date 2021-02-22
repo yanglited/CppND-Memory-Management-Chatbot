@@ -44,8 +44,8 @@ public:
     void SetChatbotHandle(ChatBot* chatbot);
 
     // proprietary functions
-    void      LoadAnswerGraphFromFile(std::string filename);
-    void      SendMessageToChatbot(std::string message);
+    void      LoadAnswerGraphFromFile(const std::string& filename);
+    void      SendMessageToChatbot(const std::string& message);
     void      SendMessageToUser(std::string message);
     wxBitmap* GetImageFromChatbot();
 };

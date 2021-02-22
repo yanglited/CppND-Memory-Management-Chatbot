@@ -31,11 +31,11 @@ private:
 
 public:
     // constructor / destructor
-    GraphNode(int id);
+    explicit GraphNode(int id);
     ~GraphNode();
 
     // getter / setter
-    int GetID()
+    [[nodiscard]] int GetID() const
     {
         return _id;
     }

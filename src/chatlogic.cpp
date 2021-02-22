@@ -13,6 +13,8 @@
 
 
 ChatLogic::ChatLogic()
+    : _currentNode {nullptr}
+    , _panelDialog {nullptr}
 {
     //// STUDENT CODE
     ////
@@ -59,7 +61,6 @@ template<typename T> void ChatLogic::AddAllTokensToElement(std::string tokenID, 
     {
         token = std::find_if(token, tokens.end(), [&tokenID](const std::pair<std::string, std::string>& pair) {
             return pair.first == tokenID;
-            ;
         });
         if(token != tokens.end())
         {
@@ -73,7 +74,7 @@ template<typename T> void ChatLogic::AddAllTokensToElement(std::string tokenID, 
     }
 }
 
-void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
+void ChatLogic::LoadAnswerGraphFromFile(std::string const& filename)
 {
     // load file with answer graph elements
     std::ifstream file(filename);
@@ -87,17 +88,17 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
         {
             // extract all tokens from current line
             tokenlist tokens;
-            while(lineStr.size() > 0)
+            while(!lineStr.empty())
             {
                 // extract next token
-                int posTokenFront = lineStr.find("<");
-                int posTokenBack  = lineStr.find(">");
+                int posTokenFront = lineStr.find('<');
+                int posTokenBack  = lineStr.find('>');
                 if(posTokenFront < 0 || posTokenBack < 0)
                     break;  // quit loop if no complete token has been found
                 std::string tokenStr = lineStr.substr(posTokenFront + 1, posTokenBack - 1);
 
                 // extract token type and info
-                int posTokenInfo = tokenStr.find(":");
+                int posTokenInfo = tokenStr.find(':');
                 if(posTokenInfo != std::string::npos)
                 {
                     std::string tokenType = tokenStr.substr(0, posTokenInfo);
@@ -179,7 +180,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             });
 
                             // create new edge
-                            GraphEdge* edge = new GraphEdge(id);
+                            auto* edge = new GraphEdge(id);
                             edge->SetChildNode(*childNode);
                             edge->SetParentNode(*parentNode);
                             _edges.push_back(edge);
@@ -252,14 +253,14 @@ void ChatLogic::SetChatbotHandle(ChatBot* chatbot)
     _chatBot = chatbot;
 }
 
-void ChatLogic::SendMessageToChatbot(std::string message)
+void ChatLogic::SendMessageToChatbot(std::string const& message)
 {
     _chatBot->ReceiveMessageFromUser(message);
 }
 
 void ChatLogic::SendMessageToUser(std::string message)
 {
-    _panelDialog->PrintChatbotResponse(message);
+    _panelDialog->PrintChatbotResponse(std::move(message));
 }
 
 wxBitmap* ChatLogic::GetImageFromChatbot()

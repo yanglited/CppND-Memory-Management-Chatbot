@@ -24,7 +24,7 @@ private:
 public:
     // constructor / destructor
     ChatBotPanelDialog(wxWindow* parent, wxWindowID id);
-    ~ChatBotPanelDialog();
+    ~ChatBotPanelDialog() override;
 
     // getter / setter
     ChatLogic* GetChatLogicHandle()
@@ -70,7 +70,7 @@ private:
 
 public:
     // constructor / desctructor
-    ChatBotFrame(const wxString& title);
+    explicit ChatBotFrame(wxString const& title);
 };
 
 // control panel for background image display
@@ -81,7 +81,7 @@ class ChatBotFrameImagePanel : public wxPanel
 
 public:
     // constructor / desctructor
-    ChatBotFrameImagePanel(wxFrame* parent);
+    explicit ChatBotFrameImagePanel(wxFrame* parent);
 
     // events
     void paintEvent(wxPaintEvent& evt);
