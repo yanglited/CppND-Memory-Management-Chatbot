@@ -21,7 +21,7 @@ private:
 
     // data handles (not owned)
     std::vector<GraphEdge*> _parentEdges;  // edges to preceding nodes
-    ChatBot*                _chatBot;
+    ChatBot                 _chatBot;      // The chat bot instance handle(?), not owned
 
     ////
     //// EOF STUDENT CODE
@@ -42,7 +42,7 @@ public:
     }
     int GetNumberOfChildEdges()
     {
-        return _childEdges.size();
+        return static_cast<int>(_childEdges.size());
     }
     GraphEdge*               GetChildEdgeAtIndex(int index);
     std::vector<std::string> GetAnswers()
@@ -51,7 +51,7 @@ public:
     }
     int GetNumberOfParents()
     {
-        return _parentEdges.size();
+        return static_cast<int>(_parentEdges.size());
     }
 
     // proprietary functions
@@ -62,7 +62,7 @@ public:
     //// STUDENT CODE
     ////
 
-    void MoveChatbotHere(ChatBot* chatbot);
+    void MoveChatbotHere(ChatBot chatBot);
 
     ////
     //// EOF STUDENT CODE

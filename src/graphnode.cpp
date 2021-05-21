@@ -2,23 +2,10 @@
 #include "graphedge.h"
 
 GraphNode::GraphNode(int id)
-    : _chatBot {nullptr}
-    , _id {id}
+    : _id {id}
+{}
 
-{
-    _id = id;
-}
-
-GraphNode::~GraphNode()
-{
-    //// STUDENT CODE
-    ////
-
-    // Bug fix, removed delete of _chatBot. The GraphNode class does not own the resource.
-
-    ////
-    //// EOF STUDENT CODE
-}
+GraphNode::~GraphNode() = default;
 
 void GraphNode::AddToken(std::string const& token)
 {
@@ -37,16 +24,15 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot* chatbot)
+void GraphNode::MoveChatbotHere(ChatBot chatBot)
 {
-    _chatBot = chatbot;
-    _chatBot->SetCurrentNode(this);
+    _chatBot = std::move(chatBot);
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode* newNode)
 {
-    newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr;  // invalidate pointer at source
+    newNode->MoveChatbotHere(std::move(_chatBot));
 }
 ////
 //// EOF STUDENT CODE

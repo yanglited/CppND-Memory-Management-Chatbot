@@ -14,32 +14,19 @@
 
 ChatLogic::ChatLogic()
     : _currentNode {nullptr}
+    , _chatBot {nullptr}
     , _panelDialog {nullptr}
 {
     //// STUDENT CODE
     ////
 
-    // create instance of chatbot
-    _chatBot = new ChatBot("../images/chatbot.png");
-
-    // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
+    std::cout << "Chat logic constructed.\n";
 
     ////
     //// EOF STUDENT CODE
 }
 
-ChatLogic::~ChatLogic()
-{
-    //// STUDENT CODE
-    ////
-
-    // delete chatbot instance
-    delete _chatBot;
-
-    ////
-    //// EOF STUDENT CODE
-}
+ChatLogic::~ChatLogic() = default;
 
 template<typename T> void ChatLogic::AddAllTokensToElement(std::string tokenID, tokenlist& tokens, T& element)
 {
@@ -226,9 +213,20 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string const& filename)
         }
     }
 
-    // add chatbot to graph root node
+    // create instance of chatbot on the stack
+    auto chatBot = ChatBot("../images/chatbot.png");
+
+    // Get the address of the chat bot in the chat logic for usages later
+    SetChatbotHandle(&chatBot);
+
+    // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
+    _chatBot->SetChatLogicHandle(this);
+
+    // Set root node for the chat bot
     _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);
+
+    // Move chat bot to the root node
+    rootNode->MoveChatbotHere(std::move(chatBot));
 
     ////
     //// EOF STUDENT CODE
@@ -239,9 +237,9 @@ void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog* panelDialog)
     _panelDialog = panelDialog;
 }
 
-void ChatLogic::SetChatbotHandle(ChatBot* chatbot)
+void ChatLogic::SetChatbotHandle(ChatBot* chatBot)
 {
-    _chatBot = chatbot;
+    _chatBot = chatBot;
 }
 
 void ChatLogic::SendMessageToChatbot(std::string const& message)
